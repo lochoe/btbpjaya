@@ -1,0 +1,18 @@
+<h1 class="my-4">Register for Event</h1>
+<form onsubmit="registerForEvent(); return false;" class="mb-4">
+  <div class="form-group">
+    <input type="text" id="noIcRegisterEvent" class="form-control" placeholder="No IC" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+<script>
+  function registerForEvent() {
+    const noIc = document.getElementById('noIcRegisterEvent').value;
+    const selectedEvent = document.querySelector('input[name="event"]:checked').value;
+
+    google.script.run.withSuccessHandler(function() {
+      alert('Registered for event successfully!');
+    }).registerForEvent(selectedEvent, noIc);
+  }
+</script>

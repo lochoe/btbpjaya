@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Event Register</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    {{NAVBAR}}
+    <div class="container">
+      <h1 class="my-4">Register for Event</h1>
+      <form onsubmit="registerForEvent(); return false;" class="mb-4">
+        <div class="form-group">
+          <input type="text" id="noIcRegisterEvent" class="form-control" placeholder="No IC" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+    </div>
+
+    <script>
+      function registerForEvent() {
+        const noIc = document.getElementById('noIcRegisterEvent').value;
+        const selectedEvent = document.querySelector('input[name="event"]:checked').value;
+
+        google.script.run.withSuccessHandler(function() {
+          alert('Registered for event successfully!');
+        }).registerForEvent(selectedEvent, noIc);
+      }
+    </script>
+  </body>
+</html>

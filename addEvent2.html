@@ -1,0 +1,43 @@
+<h1 class="my-4">Add Event (Admin Only)</h1>
+<form onsubmit="addEvent(); return false;" class="mb-4">
+  <div class="form-group">
+    <input type="text" id="eventName" class="form-control" placeholder="Event Name" required>
+  </div>
+  <div class="form-group">
+    <input type="date" id="eventDate" class="form-control" placeholder="Event Date" required>
+  </div>
+  <div class="form-group">
+    <input type="time" id="startTime" class="form-control" placeholder="Start Time" required>
+  </div>
+  <div class="form-group">
+    <input type="time" id="endTime" class="form-control" placeholder="End Time" required>
+  </div>
+  <div class="form-group">
+    <input type="text" id="venue" class="form-control" placeholder="Venue" required>
+  </div>
+  <div class="form-group">
+    <input type="text" id="venueImage" class="form-control" placeholder="Venue Image URL" required>
+  </div>
+  <div class="form-group">
+    <input type="text" id="description" class="form-control" placeholder="Description" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Add Event</button>
+</form>
+
+<script>
+  function addEvent() {
+    const eventName = document.getElementById('eventName').value;
+    const eventDate = document.getElementById('eventDate').value;
+    const startTime = document.getElementById('startTime').value;
+    const endTime = document.getElementById('endTime').value;
+    const venue = document.getElementById('venue').value;
+    const venueImage = document.getElementById('venueImage').value;
+    const description = document.getElementById('description').value;
+
+    google.script.run.withSuccessHandler(function() {
+      alert('Event added successfully!');
+    }).withFailureHandler(function(error) {
+      alert('Error: ' + error.message);
+    }).addEvent(eventName, eventDate, startTime, endTime, venue, venueImage, description);
+  }
+</script>

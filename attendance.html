@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Attendance</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    {{NAVBAR}}
+    <div class="container">
+      <h1 class="my-4">Attendance</h1>
+      <div id="attendanceList" class="row"></div>
+    </div>
+
+    <script>
+      function loadAttendance() {
+        google.script.run.withSuccessHandler(function(attendance) {
+          console.log('Attendance data loaded:', attendance); // Add logging
+          if (attendance && attendance.length > 0) {
+            const attendanceList = document.getElementById('attendanceList');
+            attendanceList.innerHTML = '';
+            attendance.forEach(record => {
+              console.log('Processing attendance record:', record); // Add logging for each record
+              const card = document.createElement('div');
+              card.className = 'card mb-3';
+              card.innerHTML = `
+                <div class="row no-gutters">
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">${record[0]}</h5>
+                      <p class="card-text">Date: ${record[1]}</p>
+                      <p class="card-text">Status: ${record[2]}</p>
+                    </div>
+                  </div>
+                </div>
+              `;
+              attendanceList.appendChild(card);
+            });
+          } else {
+            console.error('No attendance records found or attendance data is invalid');
+          }
+        }).withFailureHandler(function(error) {
+          console.error('Error loading attendance data:', error);
+        }).getAttendance();
+      }
+
+      window.onload = loadAttendance;
+    </script>
+  </body>
+</html>

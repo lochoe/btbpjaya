@@ -1,0 +1,46 @@
+<h1 class="my-4">Attendance</h1>
+<form onsubmit="loadParticipants(); return false;" class="mb-4">
+  <div class="form-group">
+    <input type="text" id="eventNameAttendance" class="form-control" placeholder="Event Name" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Load Participants</button>
+</form>
+<div id="participantList" class="row"></div>
+
+<script>
+  function loadParticipants() {
+    const eventName = document.getElementById('eventNameAttendance').value;
+    google.script.run.withSuccessHandler(function(participants) {
+      const participantList = document.getElementById('participantList');
+      participantList.innerHTML = '';
+      participants.forEach(participant => {
+        const card = document.createElement('div');
+        card.className = 'card mb-3';
+        card.innerHTML = `
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="${participant[9]}" class="card-img" alt="Participant Image">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">${participant[0]}</h5>
+                <p class="card-text">Age: ${participant[2]}</p>
+                <input type="checkbox" name="attendance" value="${participant[1]}"> Attended
+              </div>
+            </div>
+          </div>
+        `;
+        participantList.appendChild(card);
+      });
+    }).getEventParticipants(eventName);
+  }
+
+  function markAttendance() {
+    const eventName = document.getElementById('eventNameAttendance').value;
+    const checkboxes = document.querySelectorAll('input[name="attendance"]');
+    checkboxes.forEach(checkbox => {
+      google.script.run.markAttendance(eventName, checkbox.value, checkbox.checked);
+    });
+    alert('Attendance marked successfully!');
+  }
+</script>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Event List</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    {{NAVBAR}}
+    <div class="container">
+      <h1 class="my-4">Event List</h1>
+      <div id="eventList" class="row"></div>
+    </div>
+
+    <script>
+      function loadEvents() {
+        google.script.run.withSuccessHandler(function(events) {
+          console.log('Events loaded:', events); // Add logging
+          if (events && events.length > 0) {
+            const eventList = document.getElementById('eventList');
+            eventList.innerHTML = '';
+            events.forEach(event => {
+              console.log('Processing event:', event); // Add logging for each event
+              const card = document.createElement('div');
+              card.className = 'card mb-3';
+              card.innerHTML = `
+                <div class="row no-gutters">
+                  <div class="col-md-4">
+                    <img src="${event[5]}" class="card-img" alt="Venue Image">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">${event[0]}</h5>
+                      <p class="card-text">${event[1]} (${event[2]} to ${event[3]} at ${event[4]})</p>
+                      <p class="card-text">${event[6]}</p>
+                      <input type="checkbox" name="event" value="${event[0]}"> Register for this event
+                    </div>
+                  </div>
+                </div>
+              `;
+              eventList.appendChild(card);
+            });
+          } else {
+            console.error('No events found or events data is invalid');
+          }
+        }).withFailureHandler(function(error) {
+          console.error('Error loading events:', error);
+        }).getEvents();
+      }
+
+      window.onload = loadEvents;
+    </script>
+  </body>
+</html>
